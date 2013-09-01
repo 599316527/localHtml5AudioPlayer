@@ -2,6 +2,7 @@ var Player = function (options) {
     this.player = options.player;
     this.diy = options.diyplayer;
     this.currentAudioId = 0;
+    this.songLength = 0;
     this.isPlaying = false;
     this.playTimer = 0;
     this.totalTime = 0;
@@ -45,12 +46,18 @@ Player.fn.pause = function () {
 };
 
 Player.fn.prev = function () {
-    this.goto(--this.currentAudioId);
+    if (--this.currentAudioId < 0) {
+        this.currentAudioId = this.songLength - 1;
+    }
+    this.goto(this.currentAudioId);
     return this;
 };
 
 Player.fn.next = function () {
-    this.goto(++this.currentAudioId);
+    if (++this.currentAudioId >= this.songLength) {
+        this.currentAudioId = 0;
+    }
+    this.goto(this.currentAudioId);
     return this;
 };
 
@@ -62,9 +69,9 @@ Player.fn.goto = function (id) {
 Player.fn.formatSec = function (f, e) {
     var s = f%60, m = (f-s)/60, a = '';
     if (e) a += '-';
-    a += m;
+    a += m>9?m:'0'+m;
     a += ':';
-    a += s;
+    a += s>9?s:'0'+s;
     return a;
 };
 
@@ -122,6 +129,7 @@ Player.fn.bindEvents = function () {
     var that = this;
     
     var handleFinishPlaying = function () {
+        that.diy.playBtn.className = 'play';
         if (that.loopMode) {
             that.goto.call(that, that.currentAudioId);
         } else {

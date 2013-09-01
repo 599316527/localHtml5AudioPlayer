@@ -39,6 +39,9 @@ var lst = new List({
     },
     'showLoading' : function () {
         player.diy.name.innerHTML = 'Loading...';
+    },
+    'finishInit' : function (l) {
+        player.songLength = l;
     }
 });
 

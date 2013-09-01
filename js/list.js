@@ -22,6 +22,7 @@ List.fn.load = function (files) {
     });
 //    console.log(this.audios);
     this.options.dropPlaceWrapper.style.display = 'none';
+    this.options.finishInit.call(this, this.audios.length);
     return this;
 };
 
